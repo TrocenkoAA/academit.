@@ -8,25 +8,46 @@ namespace RangeClass
 {
     public class Range
     {
-        public int From
+        private double from;
+        private double to;             
+
+        public Range(double from, double to)
         {
-            get;
-            set;
-        }
-        public int To
-        {
-            get;
-            set;
+            this.from = from;
+            this.to = to;
         }
 
-        public int GetLength()
+        public double From
         {
-            return To - From;
+            get
+            {
+                return from;
+            }
+            set
+            {
+                from = From;
+            }
+        }
+        public double To
+        {
+            get
+            {
+                return to;
+            }
+            set
+            {
+                to = To;
+            }
         }
 
-        public bool IsInside(int yourNumber)
+        public double GetLength()
         {
-            return (yourNumber >= From && yourNumber <= To);
+            return to - from;
+        }
+
+        public bool IsInside(double number)
+        {
+            return (number >= from && number <= To);
         }
 
         public void Print()
