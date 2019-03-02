@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace ShapesProject
 {
-    class Circle : IShape
+    class Circle : IShape, IComparable<IShape>
     {
         private double radius;
 
@@ -37,7 +37,7 @@ namespace ShapesProject
 
         public override string ToString()
         {
-            return string.Format("Class: circle, width: {0:f2}, height: {1:f2}, area: {2:f2}, perimeter: {3:f2}", GetWidth(), GetHeight(), GetArea(), GetPerimeter());
+            return string.Format("Class: circle, radius: {0:f2} width: {1:f2}, height: {2:f2}, area: {3:f2}, perimeter: {4:f2}", radius, GetWidth(), GetHeight(), GetArea(), GetPerimeter());
         }
 
         public override bool Equals(object obj)
@@ -59,9 +59,24 @@ namespace ShapesProject
             int prime = 7;
             int hash = 1;
             hash = prime * hash + radius.GetHashCode();
-            hash = prime * hash + GetArea().GetHashCode();
 
             return hash;
+        }
+
+        public int CompareTo(IShape obj)
+        {
+            if (GetArea() < obj.GetArea())
+            {
+                return 1;
+            }
+            if (GetArea() > obj.GetArea())
+            {
+                return -1;
+            }
+            else
+            {
+                return 0;
+            }
         }
     }
 }

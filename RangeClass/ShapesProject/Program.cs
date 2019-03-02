@@ -8,21 +8,33 @@ namespace ShapesProject
 {
     class Program
     {
+        /* public static string GetMaxAreaShape(IShape[] shapesArray)
+         {
+             AreaComparer ac = new AreaComparer();//TODO:  доделать компаратор
+
+             Array.Sort(shapesArray, ac);
+
+             return shapesArray[0].ToString();
+         }*/
+
+        /* public static string GetNextToMaxAreaShape(IShape[] shapesArray)
+         {
+             AreaComparer ac = new AreaComparer();
+
+             Array.Sort(shapesArray, ac);
+
+             return shapesArray[1].ToString();
+         }*/
+
         public static string GetMaxAreaShape(IShape[] shapesArray)
         {
-            AreaComparer ac = new AreaComparer();
-
-            Array.Sort(shapesArray, ac);
-
+            Array.Sort(shapesArray);
             return shapesArray[0].ToString();
         }
 
         public static string GetNextToMaxAreaShape(IShape[] shapesArray)
         {
-            AreaComparer ac = new AreaComparer();
-
-            Array.Sort(shapesArray, ac);
-
+            Array.Sort(shapesArray);
             return shapesArray[1].ToString();
         }
 
@@ -51,6 +63,8 @@ namespace ShapesProject
             Console.WriteLine(GetMaxAreaShape(shapesArray));
 
             Console.WriteLine(GetNextToMaxAreaShape(shapesArray));
+
+            //Console.WriteLine(t1.ToString());
         }
     }
 }

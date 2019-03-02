@@ -6,9 +6,10 @@ using System.Threading.Tasks;
 
 namespace ShapesProject
 {
-    public class Rectangle : IShape
+    public class Rectangle : IShape, IComparable<IShape>
     {
-        private double width, height;
+        private double width;
+        private double height;
 
         public Rectangle(double width, double height)
         {
@@ -38,7 +39,7 @@ namespace ShapesProject
 
         public override string ToString()
         {
-            return string.Format("Class: rectangle, width: {0:f2}, height: {1:f2}, area: {2:f2}, perimeter: {3:f2}", GetWidth(), GetHeight(), GetArea(), GetPerimeter());
+            return string.Format("Class: rectangle, sides length: {0:f2}/{1:f2}, width: {2:f2}, height: {3:f2}, area: {4:f2}, perimeter: {5:f2}", width, height, GetWidth(), GetHeight(), GetArea(), GetPerimeter());
         }
 
         public override bool Equals(object obj)
@@ -64,6 +65,22 @@ namespace ShapesProject
             hash = prime * hash + height.GetHashCode();
 
             return hash;
+        }
+
+        public int CompareTo(IShape obj)
+        {
+            if (GetArea() < obj.GetArea())
+            {
+                return 1;
+            }
+            if (GetArea() > obj.GetArea())
+            {
+                return -1;
+            }
+            else
+            {
+                return 0;
+            }
         }
     }
 }
