@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace ShapesProject
 {
-    public class Triangle : IShape, IComparable<IShape>
+    public class Triangle : IShape
     {
         private double x1;
         private double y1;
@@ -32,42 +32,12 @@ namespace ShapesProject
 
         private static double GetMin(double x1, double x2, double x3)
         {
-            double min = 0;
-
-            if (x1 <= x2 && x1 <= x3)
-            {
-                min = x1;
-            }
-            if (x2 <= x1 && x2 <= x3)
-            {
-                min = x2; ;
-            }
-            if (x3 <= x1 && x3 <= x2)
-            {
-                min = x3;
-            }
-
-            return min;
+            return Math.Min(x1, Math.Min(x2, x3));
         }
 
         private static double GetMax(double x1, double x2, double x3)
         {
-            double max = 0;
-
-            if (x1 >= x2 && x1 >= x3)
-            {
-                max = x1;
-            }
-            if (x2 >= x1 && x2 >= x3)
-            {
-                max = x2; ;
-            }
-            if (x3 >= x1 && x3 >= x2)
-            {
-                max = x3;
-            }
-
-            return max;
+            return Math.Max(x1, Math.Max(x2, x3));
         }
 
         public double GetWidth()
@@ -82,7 +52,7 @@ namespace ShapesProject
 
         public double GetArea()
         {
-            double halfPerimeter = (GetSideLength(x1, x2, y1, y2) + GetSideLength(x2, x3, y2, y3) + GetSideLength(x3, x1, y3, y1)) / 2;
+            double halfPerimeter = GetPerimeter() / 2;
             return Math.Sqrt(halfPerimeter * (halfPerimeter - GetSideLength(x1, x2, y1, y2)) * (halfPerimeter - GetSideLength(x2, x3, y2, y3)) * (halfPerimeter - GetSideLength(x3, x1, y3, y1)));
         }
 
@@ -125,20 +95,6 @@ namespace ShapesProject
             return hash;
         }
 
-        public int CompareTo(IShape obj)
-        {
-            if (GetArea() < obj.GetArea())
-            {
-                return 1;
-            }
-            if (GetArea() > obj.GetArea())
-            {
-                return -1;
-            }
-            else
-            {
-                return 0;
-            }
-        }
+
     }
 }

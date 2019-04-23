@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace ShapesProject
 {
-    public interface IShape : IComparable<IShape>
+    public interface IShape
     {
         double GetWidth();
         double GetHeight();

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace ShapesProject
 {
-    class Circle : IShape, IComparable<IShape>
+    class Circle : IShape
     {
         private double radius;
 
@@ -56,27 +56,7 @@ namespace ShapesProject
 
         public override int GetHashCode()
         {
-            int prime = 7;
-            int hash = 1;
-            hash = prime * hash + radius.GetHashCode();
-
-            return hash;
-        }
-
-        public int CompareTo(IShape obj)
-        {
-            if (GetArea() < obj.GetArea())
-            {
-                return 1;
-            }
-            if (GetArea() > obj.GetArea())
-            {
-                return -1;
-            }
-            else
-            {
-                return 0;
-            }
+            return radius.GetHashCode();
         }
     }
 }

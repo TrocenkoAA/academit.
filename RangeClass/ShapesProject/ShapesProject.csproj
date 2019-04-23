@@ -46,6 +46,7 @@
     <Compile Include="Circle.cs" />
     <Compile Include="AreaComparer.cs" />
     <Compile Include="IShape.cs" />
+    <Compile Include="PerimeterComparer.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Rectangle.cs" />

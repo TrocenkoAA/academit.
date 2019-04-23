@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace ShapesProject
 {
-    public class Rectangle : IShape, IComparable<IShape>
+    public class Rectangle : IShape
     {
         private double width;
         private double height;
@@ -67,20 +67,6 @@ namespace ShapesProject
             return hash;
         }
 
-        public int CompareTo(IShape obj)
-        {
-            if (GetArea() < obj.GetArea())
-            {
-                return 1;
-            }
-            if (GetArea() > obj.GetArea())
-            {
-                return -1;
-            }
-            else
-            {
-                return 0;
-            }
-        }
+
     }
 }
