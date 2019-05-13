@@ -23,19 +23,22 @@ namespace Vector
                 //Vector v9 = new Vector(0);
 
 
-                v1.VectorSubtract(v2);
+                v1.Substracting(v2);
                 Console.WriteLine(v1.ToString());
 
-                v5.VectorAdd(v2);
+                v2.Adding(v7);
+                Console.WriteLine(v2);
+
+                v5.Adding(v2);
                 Console.WriteLine(v5.ToString());
 
                 v6.ScalarMuliyply(5);
                 Console.WriteLine(v6.ToString());
 
-                v2.VectorInvert();
+                v2.Invert();
                 Console.WriteLine(v2.ToString());
 
-                Console.WriteLine(v3.GetVectorLength());
+                Console.WriteLine(v3.GetLength());
 
                 Console.WriteLine(v3.GetComponent(3));
 
@@ -44,10 +47,10 @@ namespace Vector
 
                 Console.WriteLine(v7.Equals(v8));
 
-                Vector vector1 = Vector.GetNewVectorSumm(v6, v8);
+                Vector vector1 = Vector.GetNewSumm(v6, v8);
                 Console.WriteLine(vector1.ToString());
 
-                Vector vector2 = Vector.GetNewVectorDifference(v3, v7);
+                Vector vector2 = Vector.GetNewDifference(v3, v7);
                 Console.WriteLine(vector2.ToString());
 
                 double result = Vector.GetScalarMultiplicate(v1, v2);

@@ -8,8 +8,7 @@ namespace Vector
 {
     class Vector
     {
-        private int n;
-        private double[] componentsArray;
+        private double[] components;
 
         public Vector(int n)
         {
@@ -17,14 +16,18 @@ namespace Vector
             {
                 throw new ArgumentException("Размерность не может быть <= 0");
             }
-            this.n = n;
-            componentsArray = new double[n];
+            components = new double[n];
         }
 
         public Vector(double[] array)
         {
-            componentsArray = array;
-            n = array.Length;
+            if (array.Length <= 0)
+            {
+                throw new ArgumentException("Размерность не может быть <= 0");
+            }
+
+            components = new double[array.Length];
+            Array.Copy(array, components, array.Length);
         }
 
         public Vector(int n, double[] array)
@@ -33,97 +36,89 @@ namespace Vector
             {
                 throw new ArgumentException("Размерность не может быть <= 0");
             }
-            this.n = n;
-            componentsArray = new double[n];
-
-            for (int i = 0; i < array.Length; i++)
+            if (n < array.Length)
             {
-                componentsArray[i] = array[i];
+                throw new ArgumentException("Размерность вектора не может быть меньше массива компонент");
             }
+
+            components = new double[n];
+            Array.Copy(array, components, array.Length);
         }
 
-        public Vector(Vector previousVector)//ссылочный тип
+        public Vector(Vector previousVector)
         {
-            n = previousVector.n;
-            componentsArray = new double[n];
-            for (int i = 0; i < n; i++)
-            {
-                componentsArray[i] = previousVector.componentsArray[i];
-            }
+            components = new double[previousVector.components.Length];
+            Array.Copy(previousVector.components, components, previousVector.components.Length);
         }
 
         public int GetSize()//размерность
         {
-            return componentsArray.Length;
+            return components.Length;
         }
 
         public override string ToString()//инф. о векторе
         {
-            return string.Join(",", componentsArray);
+            return string.Join(",", components);
         }
 
-        public void VectorAdd(Vector vector)//сумма векторов
+        public void Adding(Vector addedVector)//сумма векторов
         {
-            n += vector.n;
-
-            double[] newComponentsArray = new double[n];
-            for (int i = 0; i < n - vector.n; i++)
+            if (components.Length < addedVector.components.Length)
             {
-                newComponentsArray[i] = componentsArray[i];
+                double[] utilityComponents = new double[Math.Max(components.Length, addedVector.components.Length)];
+                Array.Copy(components, utilityComponents, components.Length);
+                components = new double[utilityComponents.Length];
+                Array.Copy(utilityComponents, components, components.Length);
             }
-            for (int i = n - vector.n, j = 0; i < n; i++, j++)
+          
+            for (int i = 0; i < Math.Min(components.Length, addedVector.components.Length); i++)
             {
-                newComponentsArray[i] = vector.componentsArray[j];
+                components[i] += addedVector.components[i];
             }
-            componentsArray = newComponentsArray;
         }
 
-        public void VectorSubtract(Vector vector)//разность векторов
+        public void Substracting(Vector substractedVector)//разность векторов
         {
-            double[] transitionalArray = new double[vector.n];
-            for (int i = 0, j = vector.n - 1; i < transitionalArray.Length; i++, j--)
+            if (components.Length < substractedVector.components.Length)
             {
-                transitionalArray[i] = vector.componentsArray[j];
+                double[] utilityComponents = new double[Math.Max(components.Length, substractedVector.components.Length)];
+                Array.Copy(components, utilityComponents, components.Length);
+                components = new double[utilityComponents.Length];
+                Array.Copy(utilityComponents, components, components.Length);
             }
 
-            n += vector.n;
-
-            double[] newArray = new double[n];
-            for (int i = 0; i < n - vector.n; i++)
+            for (int i = 0; i < Math.Min(components.Length, substractedVector.components.Length); i++)
             {
-                newArray[i] = componentsArray[i];
+                components[i] -= substractedVector.components[i];
             }
-            for (int i = n - vector.n, j = 0; i < n; i++, j++)
-            {
-                newArray[i] = transitionalArray[j];
-            }
-            componentsArray = newArray;
         }
 
         public void ScalarMuliyply(double scalar)//вектор на скаляр
         {
-            for (int i = 0; i < componentsArray.Length; ++i)
+            for (int i = 0; i < components.Length; ++i)
             {
-                componentsArray[i] *= scalar;
+                components[i] *= scalar;
             }
         }
 
-        public void VectorInvert()//разворот
+        public void Invert()//разворот
         {
-            for (int i = 0; i < componentsArray.Length; ++i)
-            {
-                componentsArray[i] *= -1;
-            }
+            ScalarMuliyply(-1);
         }
 
-        public double GetVectorLength()//длина вектора
+        public double GetLength()//длина вектора
         {
-            return componentsArray[componentsArray.Length - 1] - componentsArray[0];
+            double result = 0;
+            for (int i = 0; i < components.Length; i++)
+            {
+                result += components[i];
+            }
+            return result;
         }
 
         public double GetComponent(int index)//получение компоненты по индексу
         {
-            if (index > componentsArray.Length - 1)
+            if (index >= components.Length)
             {
                 throw new ArgumentException("Слишком большой индекс");
             }
@@ -131,12 +126,12 @@ namespace Vector
             {
                 throw new ArgumentException("Индекс не может быть меньше нуля");
             }
-            return componentsArray[index];
+            return components[index];
         }
 
         public void SetComponent(int index, double newComponent)//установка компоненты по индексу
         {
-            if (index > componentsArray.Length - 1)
+            if (index >= components.Length)
             {
                 throw new ArgumentException("Слишком большой индекс");
             }
@@ -144,7 +139,7 @@ namespace Vector
             {
                 throw new ArgumentException("Индекс не может быть меньше нуля");
             }
-            componentsArray[index] = newComponent;
+            components[index] = newComponent;
         }
 
         public override bool Equals(object o)//переопределение Equals
@@ -157,135 +152,63 @@ namespace Vector
             {
                 return false;
             }
-            Vector v = (Vector)o;
 
-            if (v.n != n)
+            Vector vector = (Vector)o;
+
+            if (components.Length == vector.components.Length)
+            {
+                for (int i = 0; i <= components.Length; i++)
+                {
+                    if (components[i] != vector.components[i])
+                    {
+                        return false;
+                    }
+                }
+            }
+            else
             {
                 return false;
-            }
-
-            for (int i = 0, j = componentsArray.Length - 1; i < componentsArray.Length; i++, j--)
-            {
-                if (v.componentsArray[i] != componentsArray[j])
-                {
-                    return false;
-                }
             }
             return true;
         }
 
         public override int GetHashCode()
         {
-            int prime = 7;
-            int hash = 1;
-            int sum = 0;
-
-            for (int i = 0; i < componentsArray.Length; i++)
-            {
-                sum += (int)componentsArray[i];
-            }
-
-            hash = prime * n;
-            hash = prime * hash + sum.GetHashCode();
-
-            return hash;
+            return components.GetHashCode();
         }
 
-        public static Vector GetNewVectorSumm(Vector v1, Vector v2)//сложение(новый вектор)
+        public static Vector GetNewSumm(Vector v1, Vector v2)//сложение(новый вектор)
         {
-            Vector v3 = new Vector(Math.Max(v1.n, v2.n));
-
-            if (v1.n < v2.n)
-            {
-                for (int i = 0; i < v1.componentsArray.Length; i++)
-                {
-                    v3.componentsArray[i] = v1.componentsArray[i];
-                }
-
-                for (int i = 0; i < v3.componentsArray.Length; i++)
-                {
-                    v3.componentsArray[i] += v2.componentsArray[i];
-                }
-            }
-            else
-            {
-                for (int i = 0; i < v2.componentsArray.Length; i++)
-                {
-                    v3.componentsArray[i] = v2.componentsArray[i];
-                }
-
-                for (int i = 0; i < v3.componentsArray.Length; i++)
-                {
-                    v3.componentsArray[i] += v1.componentsArray[i];
-                }
-            }
-            return v3;
+            Vector resultVector = new Vector(Math.Max(v1.components.Length, v2.components.Length));
+            Array.Copy(v1.components, resultVector.components, v1.components.Length);
+            resultVector.Adding(v2);
+            return resultVector;
         }
 
-        public static Vector GetNewVectorDifference(Vector v1, Vector v2)//вычитание(новый вектор)
+        public static Vector GetNewDifference(Vector v1, Vector v2)//вычитание(новый вектор)
         {
-            Vector v3 = new Vector(Math.Max(v1.n, v2.n));
-
-
-            if (v1.n > v2.n)
-            {
-                for (int i = 0; i < v1.componentsArray.Length; i++)
-                {
-                    v3.componentsArray[i] = v1.componentsArray[i];
-                }
-
-                double[] utilityComponentsArray = new double[v3.n];
-
-                for (int i = 0; i < v2.componentsArray.Length; i++)
-                {
-                    utilityComponentsArray[i] = v2.componentsArray[i];
-                }
-
-                for (int i = 0; i < v3.componentsArray.Length; i++)
-                {
-                    v3.componentsArray[i] -= utilityComponentsArray[i];
-                }
-            }
-            else
-            {
-                for (int i = 0; i < v1.componentsArray.Length; i++)
-                {
-                    v3.componentsArray[i] = v1.componentsArray[i];
-                }
-
-                for (int i = 0; i < v3.componentsArray.Length; i++)
-                {
-                    v3.componentsArray[i] -= v2.componentsArray[i];
-                }
-            }
-            return v3;
+            Vector resultVector = new Vector(Math.Max(v1.components.Length, v2.components.Length));
+            Array.Copy(v1.components, resultVector.components, v1.components.Length);
+            resultVector.Substracting(v2);
+            return resultVector;
         }
 
         public static double GetScalarMultiplicate(Vector v1, Vector v2)//скалярное произведение
         {
+            double[] utilityComponents = new double[Math.Max(v1.components.Length, v2.components.Length)];
+            Array.Copy(v1.components, utilityComponents, utilityComponents.Length);
+
+            for (int i = 0; i < Math.Min(v1.components.Length, v2.components.Length); i++)
+            {
+                utilityComponents[i] *= v2.components[i];
+            }
+
             double result = 0;
-            Vector v3 = new Vector(Math.Max(v1.n, v2.n));
 
-            if (v1.n < v2.n)
+            for (int i = 0; i < utilityComponents.Length; i++)
             {
-                for (int i = 0; i < v1.componentsArray.Length; i++)
-                {
-                    v3.componentsArray[i] = v1.componentsArray[i];
-                }
+                result += utilityComponents[i];
             }
-            else
-            {
-                for (int i = 0; i < v2.componentsArray.Length; i++)
-                {
-                    v3.componentsArray[i] = v2.componentsArray[i];
-                }
-            }
-
-            for (int i = 0; i < v3.componentsArray.Length; i++)
-            {
-                result += v3.componentsArray[i];
-            }
-
             return result;
         }
     }
