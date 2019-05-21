@@ -36,13 +36,10 @@ namespace Vector
             {
                 throw new ArgumentException("Размерность не может быть <= 0");
             }
-            if (n < array.Length)
-            {
-                throw new ArgumentException("Размерность вектора не может быть меньше массива компонент");
-            }
 
-            components = new double[n];
+            components = new double[array.Length];
             Array.Copy(array, components, array.Length);
+            Array.Resize(ref components, n);
         }
 
         public Vector(Vector previousVector)
@@ -58,42 +55,44 @@ namespace Vector
 
         public override string ToString()//инф. о векторе
         {
-            return string.Join(",", components);
+            StringBuilder vectorInfo = new StringBuilder();
+
+            vectorInfo.Append("{")
+                      .Append(string.Join(",", components))
+                      .Append("}");
+
+            return vectorInfo.ToString();
         }
 
-        public void Adding(Vector addedVector)//сумма векторов
+        public void Add(Vector addedVector)//сумма векторов
         {
             if (components.Length < addedVector.components.Length)
             {
-                double[] utilityComponents = new double[Math.Max(components.Length, addedVector.components.Length)];
-                Array.Copy(components, utilityComponents, components.Length);
-                components = new double[utilityComponents.Length];
-                Array.Copy(utilityComponents, components, components.Length);
+                Array.Resize(ref components, addedVector.components.Length);
             }
-          
-            for (int i = 0; i < Math.Min(components.Length, addedVector.components.Length); i++)
+
+            int minLength = Math.Min(components.Length, addedVector.components.Length);
+            for (int i = 0; i < minLength; i++)
             {
                 components[i] += addedVector.components[i];
             }
         }
 
-        public void Substracting(Vector substractedVector)//разность векторов
+        public void Substract(Vector substractedVector)//разность векторов
         {
             if (components.Length < substractedVector.components.Length)
             {
-                double[] utilityComponents = new double[Math.Max(components.Length, substractedVector.components.Length)];
-                Array.Copy(components, utilityComponents, components.Length);
-                components = new double[utilityComponents.Length];
-                Array.Copy(utilityComponents, components, components.Length);
+                Array.Resize(ref components, substractedVector.components.Length);
             }
 
-            for (int i = 0; i < Math.Min(components.Length, substractedVector.components.Length); i++)
+            int minLength = Math.Min(components.Length, substractedVector.components.Length);
+            for (int i = 0; i < minLength; i++)
             {
                 components[i] -= substractedVector.components[i];
             }
         }
 
-        public void ScalarMuliyply(double scalar)//вектор на скаляр
+        public void ScalarMultiply(double scalar)//вектор на скаляр
         {
             for (int i = 0; i < components.Length; ++i)
             {
@@ -103,28 +102,29 @@ namespace Vector
 
         public void Invert()//разворот
         {
-            ScalarMuliyply(-1);
+            ScalarMultiply(-1);
         }
 
         public double GetLength()//длина вектора
         {
-            double result = 0;
-            for (int i = 0; i < components.Length; i++)
+            /*double result = 0;
+            foreach (int e in components)
             {
-                result += components[i];
+                result += e;
             }
-            return result;
+            return result;*/
+            return components.Length;
         }
 
         public double GetComponent(int index)//получение компоненты по индексу
         {
             if (index >= components.Length)
             {
-                throw new ArgumentException("Слишком большой индекс");
+                throw new IndexOutOfRangeException("Слишком большой индекс");
             }
             if (index < 0)
             {
-                throw new ArgumentException("Индекс не может быть меньше нуля");
+                throw new IndexOutOfRangeException("Индекс не может быть меньше нуля");
             }
             return components[index];
         }
@@ -133,11 +133,11 @@ namespace Vector
         {
             if (index >= components.Length)
             {
-                throw new ArgumentException("Слишком большой индекс");
+                throw new IndexOutOfRangeException("Слишком большой индекс");
             }
             if (index < 0)
             {
-                throw new ArgumentException("Индекс не может быть меньше нуля");
+                throw new IndexOutOfRangeException("Индекс не может быть меньше нуля");
             }
             components[index] = newComponent;
         }
@@ -155,41 +155,39 @@ namespace Vector
 
             Vector vector = (Vector)o;
 
-            if (components.Length == vector.components.Length)
-            {
-                for (int i = 0; i <= components.Length; i++)
-                {
-                    if (components[i] != vector.components[i])
-                    {
-                        return false;
-                    }
-                }
-            }
-            else
+            if (components.Length != vector.components.Length)
             {
                 return false;
+            }
+
+            for (int i = 0; i <= components.Length; i++)
+            {
+                if (components[i] != vector.components[i])
+                {
+                    return false;
+                }
             }
             return true;
         }
 
         public override int GetHashCode()
         {
-            return components.GetHashCode();
+            return components.Length.GetHashCode();
         }
 
-        public static Vector GetNewSumm(Vector v1, Vector v2)//сложение(новый вектор)
+        public static Vector GetSum(Vector v1, Vector v2)//сложение(новый вектор)
         {
             Vector resultVector = new Vector(Math.Max(v1.components.Length, v2.components.Length));
             Array.Copy(v1.components, resultVector.components, v1.components.Length);
-            resultVector.Adding(v2);
+            resultVector.Add(v2);
             return resultVector;
         }
 
-        public static Vector GetNewDifference(Vector v1, Vector v2)//вычитание(новый вектор)
+        public static Vector GetDifference(Vector v1, Vector v2)//вычитание(новый вектор)
         {
             Vector resultVector = new Vector(Math.Max(v1.components.Length, v2.components.Length));
             Array.Copy(v1.components, resultVector.components, v1.components.Length);
-            resultVector.Substracting(v2);
+            resultVector.Substract(v2);
             return resultVector;
         }
 
@@ -198,7 +196,8 @@ namespace Vector
             double[] utilityComponents = new double[Math.Max(v1.components.Length, v2.components.Length)];
             Array.Copy(v1.components, utilityComponents, utilityComponents.Length);
 
-            for (int i = 0; i < Math.Min(v1.components.Length, v2.components.Length); i++)
+            int minLength = Math.Min(v1.components.Length, v2.components.Length);
+            for (int i = 0; i < minLength; i++)
             {
                 utilityComponents[i] *= v2.components[i];
             }

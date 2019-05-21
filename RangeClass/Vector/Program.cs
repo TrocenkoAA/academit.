@@ -20,43 +20,50 @@ namespace Vector
                 Vector v6 = new Vector(4, new double[] { 1, 2, 3, 4 });
                 Vector v7 = new Vector(new double[] { 1, 2, 3, 4, 5, 6 });
                 Vector v8 = new Vector(new double[] { 6, 5, 4, 3, 2, 1 });
+                Vector v10 = new Vector(4, new double[] {1,2,3,4,5,6,7 });
                 //Vector v9 = new Vector(0);
 
 
-                v1.Substracting(v2);
-                Console.WriteLine(v1.ToString());
+                v1.Substract(v2);
+                Console.WriteLine(v1);
 
-                v2.Adding(v7);
+                v2.Add(v7);
                 Console.WriteLine(v2);
 
-                v5.Adding(v2);
-                Console.WriteLine(v5.ToString());
+                v5.Add(v2);
+                Console.WriteLine(v5);
 
-                v6.ScalarMuliyply(5);
-                Console.WriteLine(v6.ToString());
+                v6.ScalarMultiply(5);
+                Console.WriteLine(v6);
 
                 v2.Invert();
-                Console.WriteLine(v2.ToString());
+                Console.WriteLine(v2);
 
                 Console.WriteLine(v3.GetLength());
 
                 Console.WriteLine(v3.GetComponent(3));
 
                 v3.SetComponent(3, 6);
-                Console.WriteLine(v3.ToString());
+                Console.WriteLine(v3);
 
                 Console.WriteLine(v7.Equals(v8));
 
-                Vector vector1 = Vector.GetNewSumm(v6, v8);
-                Console.WriteLine(vector1.ToString());
+                Vector vector1 = Vector.GetSum(v6, v8);
+                Console.WriteLine(vector1);
 
-                Vector vector2 = Vector.GetNewDifference(v3, v7);
-                Console.WriteLine(vector2.ToString());
+                Vector vector2 = Vector.GetDifference(v3, v7);
+                Console.WriteLine(vector2);
 
                 double result = Vector.GetScalarMultiplicate(v1, v2);
                 Console.WriteLine(result);
+
+                Console.WriteLine(v10);
             }
             catch (ArgumentException e)
+            {
+                Console.WriteLine(e.Message);
+            }
+            catch (IndexOutOfRangeException e)
             {
                 Console.WriteLine(e.Message);
             }
