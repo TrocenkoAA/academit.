@@ -193,21 +193,14 @@ namespace Vector
 
         public static double GetScalarMultiplicate(Vector v1, Vector v2)//скалярное произведение
         {
-            double[] utilityComponents = new double[Math.Max(v1.components.Length, v2.components.Length)];
-            Array.Copy(v1.components, utilityComponents, utilityComponents.Length);
-
+            double result = 0;
             int minLength = Math.Min(v1.components.Length, v2.components.Length);
+
             for (int i = 0; i < minLength; i++)
             {
-                utilityComponents[i] *= v2.components[i];
+                result += v1.components[i] * v2.components[i];
             }
 
-            double result = 0;
-
-            for (int i = 0; i < utilityComponents.Length; i++)
-            {
-                result += utilityComponents[i];
-            }
             return result;
         }
     }
