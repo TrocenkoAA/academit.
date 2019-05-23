@@ -20,7 +20,8 @@ namespace Vector
                 Vector v6 = new Vector(4, new double[] { 1, 2, 3, 4 });
                 Vector v7 = new Vector(new double[] { 1, 2, 3, 4, 5, 6 });
                 Vector v8 = new Vector(new double[] { 6, 5, 4, 3, 2, 1 });
-                Vector v10 = new Vector(4, new double[] {1,2,3,4,5,6,7 });
+                Vector v10 = new Vector(4, new double[] { 1, 2, 3, 4, 5, 6, 7 });
+                Vector v11 = new Vector(new double[] { 1, 2, 3, 4 });
                 //Vector v9 = new Vector(0);
 
 
@@ -47,6 +48,7 @@ namespace Vector
                 Console.WriteLine(v3);
 
                 Console.WriteLine(v7.Equals(v8));
+                Console.WriteLine(v10.Equals(v11));
 
                 Vector vector1 = Vector.GetSum(v6, v8);
                 Console.WriteLine(vector1);
@@ -54,7 +56,7 @@ namespace Vector
                 Vector vector2 = Vector.GetDifference(v3, v7);
                 Console.WriteLine(vector2);
 
-                double result = Vector.GetScalarMultiplicate(v1, v2);
+                double result = Vector.GetScalarMultiplication(v1, v2);
                 Console.WriteLine(result);
 
                 Console.WriteLine(v10);

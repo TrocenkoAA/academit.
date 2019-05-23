@@ -37,9 +37,15 @@ namespace Vector
                 throw new ArgumentException("Размерность не может быть <= 0");
             }
 
-            components = new double[array.Length];
-            Array.Copy(array, components, array.Length);
-            Array.Resize(ref components, n);
+            components = new double[n];
+            if (n > array.Length)
+            {
+                Array.Copy(array, components, array.Length);
+            }
+            else
+            {
+                Array.Copy(array, components, n);
+            }
         }
 
         public Vector(Vector previousVector)
@@ -58,7 +64,7 @@ namespace Vector
             StringBuilder vectorInfo = new StringBuilder();
 
             vectorInfo.Append("{")
-                      .Append(string.Join(",", components))
+                      .Append(string.Join(", ", components))
                       .Append("}");
 
             return vectorInfo.ToString();
@@ -71,8 +77,7 @@ namespace Vector
                 Array.Resize(ref components, addedVector.components.Length);
             }
 
-            int minLength = Math.Min(components.Length, addedVector.components.Length);
-            for (int i = 0; i < minLength; i++)
+            for (int i = 0; i < addedVector.components.Length; i++)
             {
                 components[i] += addedVector.components[i];
             }
@@ -85,8 +90,7 @@ namespace Vector
                 Array.Resize(ref components, substractedVector.components.Length);
             }
 
-            int minLength = Math.Min(components.Length, substractedVector.components.Length);
-            for (int i = 0; i < minLength; i++)
+            for (int i = 0; i < substractedVector.components.Length; i++)
             {
                 components[i] -= substractedVector.components[i];
             }
@@ -107,13 +111,12 @@ namespace Vector
 
         public double GetLength()//длина вектора
         {
-            /*double result = 0;
+            double result = 0;
             foreach (int e in components)
             {
                 result += e;
             }
-            return result;*/
-            return components.Length;
+            return result;
         }
 
         public double GetComponent(int index)//получение компоненты по индексу
@@ -148,19 +151,20 @@ namespace Vector
             {
                 return true;
             }
+
             if (ReferenceEquals(o, null) || o.GetType() != GetType())
             {
                 return false;
             }
 
-            Vector vector = (Vector)o;
+            Vector vector = o as Vector;
 
             if (components.Length != vector.components.Length)
             {
                 return false;
             }
 
-            for (int i = 0; i <= components.Length; i++)
+            for (int i = 0; i < components.Length; i++)
             {
                 if (components[i] != vector.components[i])
                 {
@@ -191,7 +195,7 @@ namespace Vector
             return resultVector;
         }
 
-        public static double GetScalarMultiplicate(Vector v1, Vector v2)//скалярное произведение
+        public static double GetScalarMultiplication(Vector v1, Vector v2)//скалярное произведение
         {
             double result = 0;
             int minLength = Math.Min(v1.components.Length, v2.components.Length);
