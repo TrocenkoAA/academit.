@@ -38,14 +38,7 @@ namespace Vector
             }
 
             components = new double[n];
-            if (n > array.Length)
-            {
-                Array.Copy(array, components, array.Length);
-            }
-            else
-            {
-                Array.Copy(array, components, n);
-            }
+            Array.Copy(array, components, Math.Min(n, array.Length));
         }
 
         public Vector(Vector previousVector)
@@ -112,11 +105,11 @@ namespace Vector
         public double GetLength()//длина вектора
         {
             double result = 0;
-            foreach (int e in components)
+            foreach (double e in components)
             {
-                result += e;
+                result += Math.Pow(e, 2);
             }
-            return result;
+            return Math.Sqrt(result);
         }
 
         public double GetComponent(int index)//получение компоненты по индексу
@@ -157,7 +150,7 @@ namespace Vector
                 return false;
             }
 
-            Vector vector = o as Vector;
+            Vector vector = (Vector)o;
 
             if (components.Length != vector.components.Length)
             {

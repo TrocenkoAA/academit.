@@ -48,6 +48,7 @@ namespace Vector
                 Console.WriteLine(v3);
 
                 Console.WriteLine(v7.Equals(v8));
+
                 Console.WriteLine(v10.Equals(v11));
 
                 Vector vector1 = Vector.GetSum(v6, v8);
