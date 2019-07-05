@@ -25,5 +25,10 @@ namespace List
             set;
         }
 
+        public override string ToString()
+        {
+            return Data.ToString();
+        }
+
     }
 }
