@@ -12,7 +12,7 @@ namespace List
         {
             try
             {
-                LinkedList<int> list = new LinkedList<int>();
+                /*LinkedList<int> list = new LinkedList<int>();
                 list.Add(1);
                 list.Add(2);
                 list.Add(3);
@@ -20,7 +20,17 @@ namespace List
                 list.Add(6);
                 list.Add(8);
                 list.Add(10);
-                list.Add(11);
+                list.Add(11);*/
+
+                LinkedList<string> list = new LinkedList<string>();
+                list.Add("раз");
+                list.Add("два");
+                list.Add("три");
+                list.Add("четыре");
+                list.Add(null);
+                list.Add("пять");
+                list.Add(null);
+                list.Add("шесть");
 
                 foreach (var item in list)
                 {
@@ -29,21 +39,21 @@ namespace List
 
                 Console.WriteLine();
 
-                Console.WriteLine(list.RemoveElement(5));
+                Console.WriteLine(list.RemoveElement(4));
                 Console.WriteLine(list.GetFirstElement());
                 Console.WriteLine(list.GetElement(0));
-                Console.WriteLine(list.SetElement(3, 100));
-                list.AddFirst(30);
-                list.InsertElement(0, 40);
+                Console.WriteLine(list.SetElement(3, "изменение"));
+                list.AddFirst("теперь первый");
+                list.InsertElement(2, "вставка");
                 Console.WriteLine(list.RemoveFirstElement());
-                Console.WriteLine(list.RemoveByData(8));
-                Console.WriteLine(list.GetListLength());
-                list.Reverse();
-                LinkedList<int> copiedList = list.Copy();
+                Console.WriteLine(list.RemoveByData(null));
+                Console.WriteLine(list.Count);
+                //list.Reverse();
+                //LinkedList<int> copiedList = list.Copy();
 
                 Console.WriteLine();
 
-                foreach (var item in copiedList)
+                foreach (var item in list)
                 {
                     Console.WriteLine(item);
                 }

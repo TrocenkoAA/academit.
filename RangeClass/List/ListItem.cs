@@ -27,8 +27,11 @@ namespace List
 
         public override string ToString()
         {
+            if (Data == null)
+            {
+                return string.Format("Null");
+            }
             return Data.ToString();
         }
-
     }
 }
