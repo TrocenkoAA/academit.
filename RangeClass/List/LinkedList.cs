@@ -242,7 +242,7 @@ namespace List
             }
         }
 
-        public LinkedList<T> Copy()  //копирование не работает
+        public LinkedList<T> Copy()  //копирование
         {
             ListItem<T> element = head;
             LinkedList<T> newList = new LinkedList<T>();
