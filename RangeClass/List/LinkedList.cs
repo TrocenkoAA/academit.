@@ -46,6 +46,11 @@ namespace List
 
         public void Add(T data) //вставка в конец
         {
+            if (data == null)
+            {
+                throw new ArgumentNullException("Значение null");
+            }
+
             ListItem<T> listItem = new ListItem<T>(data);
 
             if (head == null)
@@ -61,6 +66,11 @@ namespace List
 
         public void AddFirst(T data)
         {
+            if (data == null)
+            {
+                throw new ArgumentNullException("Значение null");
+            }
+
             ListItem<T> listItem = new ListItem<T>(data);
             if (head == null)
             {
@@ -110,6 +120,11 @@ namespace List
 
         public ListItem<T> SetElement(int index, T data)//изменение элемента по индексу
         {
+            if (data == null)
+            {
+                throw new ArgumentNullException("Значение null");
+            }
+
             if (index > MaxIndex || index < 0)
             {
                 throw new IndexOutOfRangeException("Индекс за пределами списка");
@@ -123,6 +138,11 @@ namespace List
 
         public void InsertElement(int index, T data)//вставка по индексу
         {
+            if (data == null)
+            {
+                throw new ArgumentNullException("Значение null");
+            }
+
             if (index > Count || index < 0)
             {
                 throw new IndexOutOfRangeException("Индекс за пределами списка");
@@ -173,13 +193,13 @@ namespace List
 
         public bool RemoveByData(T removeData)//удаление по значению
         {
-            if (removeData.Equals(null))
+            if (removeData == null)
             {
 
             }
             int counter = 0;
 
-            for (ListItem<T> listElement = head; listElement.Next != null; listElement = listElement.Next, counter++)
+            for (ListItem<T> listElement = head; counter < Count; listElement = listElement.Next, counter++)
             {
                 if (listElement.Data.Equals(removeData) && listElement == head)
                 {
@@ -187,6 +207,7 @@ namespace List
                     Count--;
                     return true;
                 }
+
                 if (listElement.Next.Data.Equals(removeData))
                 {
                     if (counter + 2 > MaxIndex)
@@ -204,19 +225,35 @@ namespace List
             return false;
         }
 
-        /*public void Reverse()//разворот списка не рааботает
+        public void Reverse()//разворот списка
         {
-            if (Count == 0 || Count == 1)
+            ListItem<T> element = head;
+            ListItem<T> previousElement = null;
+
+            while (element != null)
             {
-                return;
+                ListItem<T> nextElement = element.Next;
+
+                element.Next = previousElement;
+                previousElement = element;
+                head = element;
+
+                element = nextElement;
             }
-        }*/
+        }
 
-        /*public LinkedList<T> Copy()  //копирование не работает
+        public LinkedList<T> Copy()  //копирование не работает
         {
-            
-        }*/
+            ListItem<T> element = head;
+            LinkedList<T> newList = new LinkedList<T>();
 
+            while (element != null)
+            {
+                newList.Add(element.Data);
+                element = element.Next;
+            }
+            return newList;
+        }
 
         IEnumerator IEnumerable.GetEnumerator()
         {

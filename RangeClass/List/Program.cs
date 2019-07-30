@@ -23,13 +23,13 @@ namespace List
                 list.Add(11);*/
 
                 LinkedList<string> list = new LinkedList<string>();
-                list.Add("раз");
+                list.Add("один");
                 list.Add("два");
                 list.Add("три");
                 list.Add("четыре");
-                list.Add(null);
+                // list.Add(null);
                 list.Add("пять");
-                list.Add(null);
+                //  list.Add(null);
                 list.Add("шесть");
 
                 foreach (var item in list)
@@ -41,15 +41,15 @@ namespace List
 
                 Console.WriteLine(list.RemoveElement(4));
                 Console.WriteLine(list.GetFirstElement());
-                Console.WriteLine(list.GetElement(0));
+                Console.WriteLine(list.GetElement(3));
                 Console.WriteLine(list.SetElement(3, "изменение"));
                 list.AddFirst("теперь первый");
                 list.InsertElement(2, "вставка");
                 Console.WriteLine(list.RemoveFirstElement());
-                Console.WriteLine(list.RemoveByData(null));
+                Console.WriteLine(list.RemoveByData("шесть"));
                 Console.WriteLine(list.Count);
-                //list.Reverse();
-                //LinkedList<int> copiedList = list.Copy();
+                list.Reverse();
+                LinkedList<string> copiedList = list.Copy();
 
                 Console.WriteLine();
 
@@ -57,8 +57,23 @@ namespace List
                 {
                     Console.WriteLine(item);
                 }
+
+                Console.WriteLine();
+
+                foreach (var item in copiedList)
+                {
+                    Console.WriteLine(item);
+                }
             }
             catch (IndexOutOfRangeException e)
+            {
+                Console.WriteLine(e.Message);
+            }
+            catch (ArgumentNullException e)
+            {
+                Console.WriteLine(e.Message);
+            }
+            catch (Exception e)
             {
                 Console.WriteLine(e.Message);
             }
