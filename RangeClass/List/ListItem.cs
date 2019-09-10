@@ -29,7 +29,7 @@ namespace List
         {
             if (Data == null)
             {
-                return string.Format("Null");
+                return "Null";
             }
             return Data.ToString();
         }

@@ -16,12 +16,12 @@ namespace List
             get;
             private set;
         }
-        public int MaxIndex
+
+        private int MaxIndex
         {
             get
             {
-                int maxIndex = Count - 1;
-                return maxIndex;
+                return Count - 1;
             }
         }
 
@@ -39,6 +39,7 @@ namespace List
                 if (index == indexCount)
                 {
                     element = listElement;
+                    break;
                 }
             }
             return element;
@@ -48,7 +49,7 @@ namespace List
         {
             if (data == null)
             {
-                throw new ArgumentNullException("Значение null");
+                data = default(T);
             }
 
             ListItem<T> listItem = new ListItem<T>(data);
@@ -64,11 +65,11 @@ namespace List
             Count++;
         }
 
-        public void AddFirst(T data)
+        public void AddFirst(T data) //встаавка вперед
         {
             if (data == null)
             {
-                throw new ArgumentNullException("Значение null");
+                data = default(T);
             }
 
             ListItem<T> listItem = new ListItem<T>(data);
@@ -94,9 +95,7 @@ namespace List
             ListItem<T> removedItem = null;
             if (index == 0)
             {
-                removedItem = head;
-                head = head.Next;
-                Count--;
+                RemoveFirstElement();
             }
             else if (index == MaxIndex)
             {
@@ -115,16 +114,16 @@ namespace List
 
         public ListItem<T> GetFirstElement()//получить первый элемент
         {
+            if (Count == 0)
+            {
+                throw new Exception("Список пуст");
+            }
+
             return head;
         }
 
         public ListItem<T> SetElement(int index, T data)//изменение элемента по индексу
         {
-            if (data == null)
-            {
-                throw new ArgumentNullException("Значение null");
-            }
-
             if (index > MaxIndex || index < 0)
             {
                 throw new IndexOutOfRangeException("Индекс за пределами списка");
@@ -138,12 +137,7 @@ namespace List
 
         public void InsertElement(int index, T data)//вставка по индексу
         {
-            if (data == null)
-            {
-                throw new ArgumentNullException("Значение null");
-            }
-
-            if (index > Count || index < 0)
+            if (index > MaxIndex || index < 0)
             {
                 throw new IndexOutOfRangeException("Индекс за пределами списка");
             }
@@ -152,14 +146,11 @@ namespace List
 
             if (index == 0)
             {
-                newData.Next = head;
-                head = newData;
-                Count++;
+                AddFirst(data);
             }
-            else if (index == Count)
+            else if (index == MaxIndex)
             {
-                GetElement(MaxIndex).Next = newData;
-                Count++;
+                Add(data);
             }
             else
             {
@@ -178,46 +169,42 @@ namespace List
 
             ListItem<T> removedElement = new ListItem<T>(head.Data);
 
-            if (Count == 1)
-            {
-                head = null;
-                Count--;
-            }
-            else
-            {
-                head = head.Next;
-                Count--;
-            }
+            head = head.Next;
+            Count--;
             return removedElement;
         }
 
         public bool RemoveByData(T removeData)//удаление по значению
         {
-            if (removeData == null)
+            if (head.Data.Equals(removeData))
             {
-
+                head = head.Next;
+                Count--;
+                return true;
             }
+
             int counter = 0;
-
-            for (ListItem<T> listElement = head; counter < Count; listElement = listElement.Next, counter++)
-            {
-                if (listElement.Data.Equals(removeData) && listElement == head)
+            for (ListItem<T> curentElement = head, previousElement = null; counter <= MaxIndex; previousElement = curentElement, curentElement = curentElement.Next, counter++)
+            {       
+                if (curentElement.Data == null)
                 {
-                    head = head.Next;
-                    Count--;
-                    return true;
-                }
-
-                if (listElement.Next.Data.Equals(removeData))
-                {
-                    if (counter + 2 > MaxIndex)
+                    if (removeData == null)
                     {
-                        listElement.Next = null;
+                        previousElement.Next = curentElement.Next;
+                        curentElement.Next = null;
                         Count--;
                         return true;
                     }
+                    else
+                    {
+                        continue;
+                    }
+                }
 
-                    listElement.Next = GetElement(counter + 2);
+                if (curentElement.Data.Equals(removeData))
+                {
+                    previousElement.Next = curentElement.Next;
+                    curentElement.Next = null;
                     Count--;
                     return true;
                 }

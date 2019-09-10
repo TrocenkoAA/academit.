@@ -23,14 +23,15 @@ namespace List
                 list.Add(11);*/
 
                 LinkedList<string> list = new LinkedList<string>();
+                list.Add("ноль");
                 list.Add("один");
                 list.Add("два");
                 list.Add("три");
                 list.Add("четыре");
-                // list.Add(null);
-                list.Add("пять");
-                //  list.Add(null);
+                list.Add(null);
                 list.Add("шесть");
+                list.Add(null);
+                list.Add("восемь");
 
                 foreach (var item in list)
                 {
@@ -39,14 +40,14 @@ namespace List
 
                 Console.WriteLine();
 
-                Console.WriteLine(list.RemoveElement(4));
+                Console.WriteLine(list.RemoveElement(8));
                 Console.WriteLine(list.GetFirstElement());
-                Console.WriteLine(list.GetElement(3));
-                Console.WriteLine(list.SetElement(3, "изменение"));
+                Console.WriteLine(list.GetElement(5));
+                Console.WriteLine(list.SetElement(6, "изменение"));
                 list.AddFirst("теперь первый");
-                list.InsertElement(2, "вставка");
+                list.InsertElement(0, null);
                 Console.WriteLine(list.RemoveFirstElement());
-                Console.WriteLine(list.RemoveByData("шесть"));
+                Console.WriteLine(list.RemoveByData(null));
                 Console.WriteLine(list.Count);
                 list.Reverse();
                 LinkedList<string> copiedList = list.Copy();
