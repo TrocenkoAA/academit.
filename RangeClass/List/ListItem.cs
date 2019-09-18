@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace List
+﻿namespace List
 {
     public class ListItem<T>
     {
@@ -32,6 +26,20 @@ namespace List
                 return "Null";
             }
             return Data.ToString();
+        }
+
+        public override bool Equals(object obj)
+        {
+            if ((obj == null) || !GetType().Equals(obj.GetType()))
+            {
+                return false;
+            }
+            ListItem<T> item = (ListItem<T>)obj;
+            if (item.Data == null && Data == null)
+            {
+                return true;
+            }
+            return (dynamic)item.Data == (dynamic)Data;
         }
     }
 }

@@ -1,8 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+
 
 namespace List
 {
@@ -33,6 +30,16 @@ namespace List
                 list.Add(null);
                 list.Add("восемь");
 
+                LinkedList<string> listCopy = new LinkedList<string>();
+                listCopy.Add(null);
+                listCopy.Add(null);
+                listCopy.Add(null);
+                listCopy.Add(null);
+                listCopy.Add(null);
+                listCopy.Add(null);
+                listCopy.Add(null);
+                listCopy.Add(null);
+
                 foreach (var item in list)
                 {
                     Console.WriteLine(item);
@@ -40,17 +47,17 @@ namespace List
 
                 Console.WriteLine();
 
-                Console.WriteLine(list.RemoveElement(8));
+                Console.WriteLine(list.RemoveElement(0));
                 Console.WriteLine(list.GetFirstElement());
                 Console.WriteLine(list.GetElement(5));
                 Console.WriteLine(list.SetElement(6, "изменение"));
                 list.AddFirst("теперь первый");
-                list.InsertElement(0, null);
+                list.InsertElement(6, "вставка");
                 Console.WriteLine(list.RemoveFirstElement());
-                Console.WriteLine(list.RemoveByData(null));
+                Console.WriteLine(list.RemoveByData("восемь"));
                 Console.WriteLine(list.Count);
                 list.Reverse();
-                LinkedList<string> copiedList = list.Copy();
+                list.Copy(listCopy);
 
                 Console.WriteLine();
 
@@ -61,7 +68,7 @@ namespace List
 
                 Console.WriteLine();
 
-                foreach (var item in copiedList)
+                foreach (var item in listCopy)
                 {
                     Console.WriteLine(item);
                 }
