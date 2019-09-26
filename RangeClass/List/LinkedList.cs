@@ -9,6 +9,21 @@ namespace List
     {
         private ListItem<T> head;
 
+        public LinkedList()
+        {
+
+        }
+
+        public LinkedList(int capacity)
+        {
+            int i = 0;
+            while (i < capacity)
+            {
+                AddFirst(default(T));
+                i++;
+            }
+        }
+
         public int Count
         {
             get;
@@ -23,6 +38,16 @@ namespace List
             }
         }
 
+        private static void DataCopy(ListItem<T> inputItem, ListItem<T> outputItem)
+        {
+            while (inputItem != null)
+            {
+                outputItem.Data = inputItem.Data;
+                inputItem = inputItem.Next;
+                outputItem = outputItem.Next;
+            }
+        }
+
         public ListItem<T> GetElement(int index)//получение элемента по индексу
         {
             if (index >= Count || index < 0)
@@ -31,14 +56,14 @@ namespace List
             }
 
             int i = 0;
-            for (ListItem<T> listElement = head; index >= i; listElement = listElement.Next, i++)
+            ListItem<T> listElement = head;
+
+            while (index != i)
             {
-                if (index == i)
-                {
-                    return listElement;
-                }
+                listElement = listElement.Next;
+                i++;
             }
-            return null;
+            return listElement;
         }
 
         public void Add(T data) //вставка в конец
@@ -55,6 +80,11 @@ namespace List
             }
             Count++;
         }
+
+        public void ClearAll()
+        {
+            head = null;
+        }// очистить список
 
         public void AddFirst(T data) //встаавка вперед
         {
@@ -73,23 +103,23 @@ namespace List
 
         public T RemoveElement(int index)//удаление по индексу
         {
+            if (Count == 0)
+            {
+                throw new NullReferenceException("Список пуст");
+            }
             if (index > MaxIndex || index < 0)
             {
                 throw new IndexOutOfRangeException("Индекс за пределами списка");
             }
-
-            ListItem<T> removedItem = null;
             if (index == 0)
             {
                 return RemoveFirstElement();
             }
-            else
-            {
-                ListItem<T> previousItem = GetElement(index - 1);
-                removedItem = previousItem.Next;
-                previousItem.Next = removedItem.Next;
-                Count--;
-            }
+
+            ListItem<T> previousItem = GetElement(index - 1);
+            ListItem<T> removedItem = previousItem.Next;
+            previousItem.Next = removedItem.Next;
+            Count--;
             return removedItem.Data;
         }
 
@@ -97,7 +127,7 @@ namespace List
         {
             if (Count == 0)
             {
-                throw new Exception("Список пуст");
+                throw new NullReferenceException("Список пуст");
             }
 
             return head.Data;
@@ -105,13 +135,18 @@ namespace List
 
         public T SetElement(int index, T data)//изменение элемента по индексу
         {
+            if (Count == 0)
+            {
+                throw new NullReferenceException("Список пуст");
+            }
             if (index > MaxIndex || index < 0)
             {
                 throw new IndexOutOfRangeException("Индекс за пределами списка");
             }
 
-            T previousData = GetElement(index).Data;
-            GetElement(index).Data = data;
+            ListItem<T> indexElement = GetElement(index);
+            T previousData = indexElement.Data;
+            indexElement.Data = data;
             return previousData;
         }
 
@@ -121,66 +156,68 @@ namespace List
             {
                 throw new IndexOutOfRangeException("Индекс за пределами списка");
             }
-
-            ListItem<T> newData = new ListItem<T>(data);
+            if (Count == 0 && index != 0)
+            {
+                throw new NullReferenceException("Список пуст");
+            }
 
             if (index == 0)
             {
                 AddFirst(data);
             }
-            else if (index > MaxIndex)
+            else if (index == Count)
             {
                 Add(data);
             }
             else
             {
+                ListItem<T> newData = new ListItem<T>(data);
                 ListItem<T> lastElement = GetElement(index - 1);
                 newData.Next = lastElement.Next;
                 lastElement.Next = newData;
+                Count++;
             }
-            Count++;
         }
 
         public T RemoveFirstElement()//удаалить первый элемент
         {
             if (Count == 0)
             {
-                throw new Exception("Список пуст");
+                throw new NullReferenceException("Список пуст");
             }
 
-            T removedElement = head.Data;
+            T removedData = head.Data;
 
             head = head.Next;
             Count--;
-            return removedElement;
+            return removedData;
         }
 
         public bool RemoveByData(T removeData)//удаление по значению
         {
             if (Count == 0)
             {
-                throw new Exception("Список пуст");
+                throw new NullReferenceException("Список пуст");
             }
 
-            ListItem<T> removedObject = new ListItem<T>(removeData);
-
-            if (head.Equals(removedObject))
+            if (Equals(head.Data, removeData))
             {
                 head = head.Next;
                 Count--;
                 return true;
             }
 
-            int i = 1;
-            for (ListItem<T> curentElement = GetElement(i), previousElement = head; i <= MaxIndex; previousElement = curentElement, curentElement = curentElement.Next, i++)
+            ListItem<T> currentElement = head.Next;
+            while (currentElement != null)
             {
-                if (curentElement.Equals(removedObject))
+                if (Equals(currentElement.Next.Data, removeData))
                 {
-                    previousElement.Next = curentElement.Next;
-                    curentElement.Next = null;
+                    ListItem<T> removedLink = currentElement.Next;
+                    currentElement.Next = removedLink.Next;
                     Count--;
                     return true;
                 }
+                currentElement = currentElement.Next;
             }
             return false;
         }
@@ -202,26 +239,36 @@ namespace List
             }
         }
 
-        public void Copy(LinkedList<T> newList)  //копирование
+        /*public static void Copy(LinkedList<T> inputList, LinkedList<T> outputList)  //копирование
         {
-            if (newList.Count != Count)
+            if (inputList.Count > outputList.Count)
             {
-                throw new IndexOutOfRangeException("Размеры списков не равны");
+                outputList.ClearAll();
+                int i = 0;
+                while (i < inputList.Count)
+                {
+                    outputList.AddFirst(default(T));
+                    i++;
+                }
+                DataCopy(inputList.head, outputList.head);
             }
-            ListItem<T> element = head;
-            ListItem<T> copiedElement = newList.head;
+            else
+            {
+                DataCopy(inputList.head, outputList.head);
+            }
+        }*/
 
-            while (element != null)
-            {
-                copiedElement.Data = element.Data;
-                element = element.Next;
-                copiedElement = copiedElement.Next;
-            }
+        public LinkedList<T> Copy()//копированик другой вариант
+        {
+            LinkedList<T> newList = new LinkedList<T>(Count);
+
+            DataCopy(head, newList.head);
+            return newList;
         }
 
         IEnumerator IEnumerable.GetEnumerator()
         {
-            return ((IEnumerable<T>)this).GetEnumerator();
+            return GetEnumerator();
         }
 
         public IEnumerator<T> GetEnumerator()

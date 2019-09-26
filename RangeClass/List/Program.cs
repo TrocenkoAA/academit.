@@ -30,16 +30,6 @@ namespace List
                 list.Add(null);
                 list.Add("восемь");
 
-                LinkedList<string> listCopy = new LinkedList<string>();
-                listCopy.Add(null);
-                listCopy.Add(null);
-                listCopy.Add(null);
-                listCopy.Add(null);
-                listCopy.Add(null);
-                listCopy.Add(null);
-                listCopy.Add(null);
-                listCopy.Add(null);
-
                 foreach (var item in list)
                 {
                     Console.WriteLine(item);
@@ -49,15 +39,31 @@ namespace List
 
                 Console.WriteLine(list.RemoveElement(0));
                 Console.WriteLine(list.GetFirstElement());
-                Console.WriteLine(list.GetElement(5));
+                Console.WriteLine(list.GetElement(6));
                 Console.WriteLine(list.SetElement(6, "изменение"));
                 list.AddFirst("теперь первый");
-                list.InsertElement(6, "вставка");
+                list.InsertElement(9, "вставка");
                 Console.WriteLine(list.RemoveFirstElement());
                 Console.WriteLine(list.RemoveByData("восемь"));
                 Console.WriteLine(list.Count);
                 list.Reverse();
-                list.Copy(listCopy);
+
+                Console.WriteLine();
+
+                /*LinkedList<string> newList = new LinkedList<string>();
+                newList.Add("0");
+                newList.Add("1");
+                newList.Add("2");
+                newList.Add("3");
+
+                foreach (var item in newList)
+                {
+                    Console.WriteLine(item);
+                }
+
+                LinkedList<string>.Copy(list, newList);*/
+
+                LinkedList<string> newList = list.Copy();
 
                 Console.WriteLine();
 
@@ -68,7 +74,7 @@ namespace List
 
                 Console.WriteLine();
 
-                foreach (var item in listCopy)
+                foreach (var item in newList)
                 {
                     Console.WriteLine(item);
                 }
