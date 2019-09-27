@@ -83,6 +83,7 @@ namespace List
 
         public void ClearAll()
         {
+            Count = 0;
             head = null;
         }// очистить список
 
